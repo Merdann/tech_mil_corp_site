@@ -1,0 +1,52 @@
+version: '3.5'
+
+services:
+
+  db:
+    container_name: tech_mil_corp_site_db_v1.0.0
+    image: tech_mil_corp_site_db:v1.0.0
+    build:
+      context: ./db
+      dockerfile: Dockerfile
+    ports:
+      - 8432:5432
+    env_file:
+      - ./.env
+    networks:
+    - docker_network
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+  api:
+    container_name: tech_mil_corp_site_api_v1.0.0
+    image: tech_mil_corp_site_api:v1.0.0
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    ports:
+    - '11000:8000'
+    command:
+      sh -c "
+      /api/./main.py"
+    env_file:
+      - ./.env
+    depends_on:
+      - db
+    networks:
+    - docker_network
+    volumes:
+      - static:/api/static
+      - migrations:/api/migrations
+
+networks:
+  docker_network:
+    name: docker_network
+    external: true
+
+volumes:
+  db_data:
+    driver: local
+  static:
+    driver: local
+  migrations:
+    driver: local
