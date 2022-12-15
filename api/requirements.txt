@@ -21,7 +21,7 @@ dnspython
 ecdsa
 email-validator
 fastapi
-fastapi-mail
+fastapi-mail==1.2.0
 fastapi-offline
 fastapi-pagination
 filelock

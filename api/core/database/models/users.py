@@ -26,6 +26,7 @@ class User(Base):
         "ProjectTranslation", back_populates="user"
     )
     videos = relationship("MainVideo", back_populates="user")
+    carousels_main = relationship("CarouselMain", back_populates="user")
 
     def __repr__(self) -> str:
         return f"{self.username}"

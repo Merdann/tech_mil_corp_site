@@ -1,5 +1,6 @@
 from endpoints.v1.routes import authentication
 from endpoints.v1.routes import follow_us
+from endpoints.v1.routes import carousel_main
 from endpoints.v1.routes import languages
 from endpoints.v1.routes import lets_talk
 from endpoints.v1.routes import main_video
@@ -34,6 +35,12 @@ api_router.include_router(
     languages.router,
     prefix="/languages",
     tags=["languages"],
+)
+
+api_router.include_router(
+    carousel_main.router,
+    prefix="/carousel_main",
+    tags=["carousel_main"],
 )
 
 api_router.include_router(

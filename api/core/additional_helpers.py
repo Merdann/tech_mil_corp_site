@@ -6,6 +6,7 @@ from uuid import uuid4
 from core.database.base.query_helpers import DbQuery
 from core.database.models.languages import Language
 from core.exceptions import exceptions
+from fastapi import UploadFile
 from PIL import Image
 
 
@@ -39,6 +40,15 @@ MAIN_VIDEO = {
 }
 
 
+COURUSEL = {
+    "allowed_image_types": [
+        "image/jpeg",
+        "image/png",
+    ],
+    "allowed_image_size": 1_000_000,
+}
+
+
 def create_migrations_dirs():
     migrations = "migrations"
     versions_include = "versions"
@@ -54,7 +64,7 @@ def create_static_dirs():
     main_static = "static"
     static_include = ["images", "videos", "animations"]
     imgs_videos_animations = ["projects"]
-    imgs = ["users"]
+    imgs = ["users", "courusel"]
     videos = ["main_video"]
 
     if not os.path.exists(f"{main_static}"):
@@ -129,6 +139,11 @@ def static_main_video_videos_dir_name() -> str:
     return main_video_dir
 
 
+def static_courusel_dir_name() -> str:
+    courusel_dir = "static/images/courusel"
+    return courusel_dir
+
+
 def personal_dirname(title: str) -> str:
     """
     Return dirname based on title with replaced
@@ -174,6 +189,18 @@ def renamed_file_name(file_name: str) -> str:
     new_without_ext = f"{without_ext}-{uniq_str}"
     new_file_name = f"{new_without_ext}.{file_ext}"
     return new_file_name
+
+
+def prepare_file_for_save(
+    title: str, static_dir_name: Callable, file: UploadFile
+):
+    file_for_save = save_uploaded_file_and_return_file_path(
+        title,
+        static_dir_name,
+        file.filename,
+        file.file,
+    )
+    return file_for_save
 
 
 def dir_with_file_for_save_path(
