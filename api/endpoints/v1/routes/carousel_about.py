@@ -2,10 +2,10 @@ from typing import List
 from uuid import UUID
 
 from core.database.base.session import get_db
-from core.database.repository import carousel_main
-from core.schemas.carousel_main import CarouselMainDisplayClient
-from core.schemas.carousel_main import CarouselMainDisplay
-from core.schemas.carousel_main import CarouselMainDetailDisplayAdmin
+from core.database.repository import carousel_about
+from core.schemas.carousel_about import CarouselAboutDisplayClient
+from core.schemas.carousel_about import CarouselAboutDisplay
+from core.schemas.carousel_about import CarouselAboutDetailDisplayAdmin
 from core.security import JWTBearer
 from fastapi import APIRouter
 from fastapi import Depends
@@ -22,19 +22,19 @@ router = APIRouter()
 
 @router.get(
     "/all",
-    response_model=List[CarouselMainDisplayClient],
+    response_model=List[CarouselAboutDisplayClient],
     status_code=status.HTTP_200_OK,
 )
 async def get_all_items_client(
     db: Session = Depends(get_db)
 ):
-    all = carousel_main.get_all_items_client(db)
+    all = carousel_about.get_all_items_client(db)
     return all
 
 
 @router.post(
     "/admin/create",
-    response_model=CarouselMainDetailDisplayAdmin,
+    response_model=CarouselAboutDetailDisplayAdmin,
     status_code=status.HTTP_201_CREATED,
 )
 async def create_element_admin(
@@ -43,7 +43,7 @@ async def create_element_admin(
     tkn: str = Depends(JWTBearer()),
     db: Session = Depends(get_db),
 ):
-    item = await carousel_main.create_element_admin(
+    item = await carousel_about.create_element_admin(
         req, image, tkn, db
     )
     return item
@@ -51,19 +51,19 @@ async def create_element_admin(
 
 @router.get(
     "/admin/all",
-    response_model=List[CarouselMainDisplay],
+    response_model=List[CarouselAboutDisplay],
     status_code=status.HTTP_200_OK,
 )
 async def get_all_items_admin(
     tkn: str = Depends(JWTBearer()), db: Session = Depends(get_db)
 ):
-    all = carousel_main.get_all_items_admin(tkn, db)
+    all = carousel_about.get_all_items_admin(tkn, db)
     return all
 
 
 @router.get(
     "/admin/{item_id}",
-    response_model=CarouselMainDetailDisplayAdmin,
+    response_model=CarouselAboutDetailDisplayAdmin,
     status_code=status.HTTP_200_OK,
 )
 async def get_one_item_admin(
@@ -71,7 +71,7 @@ async def get_one_item_admin(
     tkn: str = Depends(JWTBearer()),
     db: Session = Depends(get_db),
 ):
-    item = carousel_main.get_one_item_admin(
+    item = carousel_about.get_one_item_admin(
         item_id, tkn, db
     )
     return item
@@ -79,7 +79,7 @@ async def get_one_item_admin(
 
 @router.put(
     "/admin/{item_id}",
-    response_model=CarouselMainDetailDisplayAdmin,
+    response_model=CarouselAboutDetailDisplayAdmin,
     status_code=status.HTTP_202_ACCEPTED,
 )
 async def update_courusel_admin(
@@ -90,7 +90,7 @@ async def update_courusel_admin(
     tkn: str = Depends(JWTBearer()),
     db: Session = Depends(get_db),
 ):
-    item = carousel_main.update_courusel_admin(
+    item = carousel_about.update_courusel_admin(
         req, item_id, image, is_active, tkn, db
     )
     return item
@@ -102,5 +102,5 @@ async def delete_one_item_admin(
     tkn: str = Depends(JWTBearer()),
     db: Session = Depends(get_db),
 ):
-    carousel_main.delete_one_item_admin(item_id, tkn, db)
+    carousel_about.delete_one_item_admin(item_id, tkn, db)
     return Response(status_code=status.HTTP_204_NO_CONTENT)

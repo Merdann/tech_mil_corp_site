@@ -1,5 +1,6 @@
 from endpoints.v1.routes import authentication
 from endpoints.v1.routes import follow_us
+from endpoints.v1.routes import carousel_about
 from endpoints.v1.routes import carousel_main
 from endpoints.v1.routes import languages
 from endpoints.v1.routes import lets_talk
@@ -41,6 +42,12 @@ api_router.include_router(
     carousel_main.router,
     prefix="/carousel_main",
     tags=["carousel_main"],
+)
+
+api_router.include_router(
+    carousel_about.router,
+    prefix="/carousel_about",
+    tags=["carousel_about"],
 )
 
 api_router.include_router(

@@ -1,4 +1,5 @@
 from core.database.base.base_class import Base
+from core.database.models.carousel_about import CarouselAbout
 from core.database.models.carousel_main import CarouselMain
 from core.database.models.follow_us import FollowUs
 from core.database.models.languages import Language

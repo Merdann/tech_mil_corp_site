@@ -27,6 +27,7 @@ class User(Base):
     )
     videos = relationship("MainVideo", back_populates="user")
     carousels_main = relationship("CarouselMain", back_populates="user")
+    carousels_about = relationship("CarouselAbout", back_populates="user")
 
     def __repr__(self) -> str:
         return f"{self.username}"

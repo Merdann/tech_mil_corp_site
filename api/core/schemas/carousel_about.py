@@ -3,21 +3,21 @@ from pydantic import BaseModel
 from pydantic import UUID4
 
 
-class CarouselMainDisplayClient(BaseModel):
+class CarouselAboutDisplayClient(BaseModel):
     image: str
 
     class Config:
         orm_mode = True
 
 
-class CarouselMainDisplay(CarouselMainDisplayClient):
+class CarouselAboutDisplay(CarouselAboutDisplayClient):
     id: UUID4
 
     class Config:
         orm_mode = True
 
 
-class CarouselMainDetailDisplayAdmin(CarouselMainDisplay):
+class CarouselAboutDetailDisplayAdmin(CarouselAboutDisplay):
     is_active: bool
     user: UserDisplayShort
 

@@ -1,3 +1,4 @@
+from core.database.models.carousel_about import *
 from core.database.models.carousel_main import *
 from core.database.models.follow_us import *
 from core.database.models.languages import *
