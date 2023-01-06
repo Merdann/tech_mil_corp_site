@@ -23,14 +23,13 @@ from sqlalchemy.orm.session import Session
 
 
 def exception_if_project_exists(
-    db: Session, title_highlight: str, title_head: str
+    db: Session, title_highlight: str
 ):
     project_exists = (
         db.query(Project)
         .filter(
             Project.is_deleted == bool(0),
             Project.title_highlight == title_highlight,
-            Project.title_head == title_head,
             Project.origin_lang_code == default_lang(),
         )
         .first()
@@ -42,9 +41,8 @@ def exception_if_project_exists(
 def prepare_multimedia_for_save(
     multimedia: UploadFile,
     title_highlight: str,
-    title_head: str,
 ):
-    title = title_highlight + " " + title_head
+    title = title_highlight
     multimedia_for_save = save_uploaded_file_and_return_file_path(
         title,
         static_projects_image_dir_name(),
@@ -264,7 +262,6 @@ def get_one_project_client(project_id: UUID, lang: str, db: Session):
 async def create_project_translation(
     req: Request,
     title_highlight: str,
-    title_head: str,
     description: str,
     origin_elem_id: UUID,
     lang_code: str,
@@ -280,7 +277,7 @@ async def create_project_translation(
     user_id = Tkn.user_id(tkn, User, db)
 
     if lang_code == default_lang():
-        exception_if_project_exists(db, title_highlight, title_head)
+        exception_if_project_exists(db, title_highlight)
         exceptions.exception_field_is_required(multimedia, "multimedia")
 
         check_files_types(multimedia, project_images, project_videos)
@@ -289,13 +286,11 @@ async def create_project_translation(
         multimedia_for_save = prepare_multimedia_for_save(
             multimedia,
             title_highlight,
-            title_head,
         )
 
         project = Project(
             owner_id=user_id,
             title_highlight=title_highlight,
-            title_head=title_head,
             description=description,
             multimedia=multimedia_for_save,
             origin_lang_code=lang_code,
@@ -307,7 +302,6 @@ async def create_project_translation(
         project_translation = ProjectTranslation(
             owner_id=user_id,
             title_highlight=title_highlight,
-            title_head=title_head,
             description=description,
             origin_elem_id=project.id,
             lang_code=lang_code,
@@ -318,7 +312,7 @@ async def create_project_translation(
 
         if project_images:
             prj_imgs_for_save = prepare_project_images_for_save(
-                project_images, title_highlight + " " + title_head
+                project_images, title_highlight
             )
 
             for prj_img in prj_imgs_for_save:
@@ -332,7 +326,7 @@ async def create_project_translation(
 
         if project_videos:
             prj_videos_for_save = prepare_project_videos_for_save(
-                project_videos, title_highlight + " " + title_head
+                project_videos, title_highlight
             )
 
             for prj_video in prj_videos_for_save:
@@ -351,7 +345,6 @@ async def create_project_translation(
         project_translation = ProjectTranslation(
             owner_id=user_id,
             title_highlight=title_highlight,
-            title_head=title_head,
             description=description,
             origin_elem_id=origin_elem_id,
             lang_code=lang_code,
@@ -392,7 +385,6 @@ async def update_project_admin(
     req: Request,
     project_id: UUID,
     title_highlight: str,
-    title_head: str,
     description: str,
     lang_code: str,
     multimedia: UploadFile,
@@ -407,7 +399,6 @@ async def update_project_admin(
 
     data = data_with_deleted_empty_fields(
         {
-            "title_head": title_head,
             "title_highlight": title_highlight,
             "description": description,
             "is_active": is_active,
@@ -421,8 +412,6 @@ async def update_project_admin(
         )
         if title_highlight:
             project_origin.title_highlight = title_highlight
-        if title_head:
-            project_origin.title_head = title_head
         if description:
             project_origin.description = description
 
@@ -438,7 +427,6 @@ async def update_project_admin(
             multimedia_for_save = prepare_multimedia_for_save(
                 multimedia,
                 project_origin.title_highlight,
-                project_origin.title_head,
             )
             project_origin.multimedia = multimedia_for_save
         db.commit()

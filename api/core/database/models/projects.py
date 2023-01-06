@@ -8,7 +8,6 @@ from sqlalchemy.orm import relationship
 
 class Project(Base):
     title_highlight = Column(String, nullable=False)
-    title_head = Column(String, nullable=False)
     description = Column(String, nullable=False)
     multimedia = Column(String, nullable=False)
 
@@ -68,7 +67,6 @@ class ProjectVideo(Base):
 
 class ProjectTranslation(Base):
     title_highlight = Column(String, nullable=False)
-    title_head = Column(String, nullable=False)
     description = Column(String, nullable=False)
     lang_code = Column(String, ForeignKey("language.code"), nullable=False)
 

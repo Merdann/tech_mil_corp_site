@@ -57,7 +57,6 @@ async def get_one_project_client(
 async def create_project_translation(
     req: Request,
     title_highlight: str = Form(min_length=1, max_length=50),
-    title_head: str = Form(min_length=1, max_length=50),
     description: str = Form(min_length=1, max_length=500),
     origin_elem_id: Optional[UUID] = Form(None),
     lang_code: str = Form(min_length=2, max_length=2, default=default_lang()),
@@ -75,7 +74,6 @@ async def create_project_translation(
     project = await projects.create_project_translation(
         req,
         title_highlight,
-        title_head,
         description,
         origin_elem_id,
         lang_code,
@@ -124,7 +122,6 @@ async def update_project_admin(
     project_id: UUID,
     req: Request,
     title_highlight: str = Form(min_length=1, max_length=50, default=None),
-    title_head: str = Form(min_length=1, max_length=50, default=None),
     description: str = Form(min_length=1, max_length=500, default=None),
     lang_code: str = Form(min_length=2, max_length=2, default=default_lang()),
     multimedia: UploadFile = File(None),
@@ -136,7 +133,6 @@ async def update_project_admin(
         req,
         project_id,
         title_highlight,
-        title_head,
         description,
         lang_code,
         multimedia,

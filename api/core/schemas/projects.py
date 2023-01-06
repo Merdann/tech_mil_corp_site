@@ -33,7 +33,6 @@ class ProjectDisplay(BaseModel):
 class ProjectListDisplay(BaseModel):
     id: UUID4
     title_highlight: str
-    title_head: str
     multimedia: str
 
     class Config:
@@ -52,7 +51,6 @@ class ProjectDetailDisplay(BaseModel):
 
 class ProjectTranslationListDisplay(BaseModel):
     title_highlight: str
-    title_head: str
     project: ProjectDisplay
 
     class Config:
@@ -61,7 +59,6 @@ class ProjectTranslationListDisplay(BaseModel):
 
 class ProjectTranslationDetailDisplay(BaseModel):
     title_highlight: str
-    title_head: str
     description: str
     project: ProjectDetailDisplay
 
